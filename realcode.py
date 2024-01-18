@@ -61,6 +61,6 @@ class MorseCodeConverter:
 converter = MorseCodeConverter()
 
 # Converting a text to Morse code
-text = "Hello, World!"
+text = code
 morse_code = converter.convert_to_morse_code(text)
 print(f"The Morse code representation of '{text}' is: {morse_code}")
