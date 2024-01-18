@@ -1,135 +1,66 @@
-class SudokuSolver:
+class MorseCodeConverter:
     """
-    Class to solve a Sudoku board.
+    Class to handle the conversion of text to Morse code.
 
     Attributes:
-    - board: list of lists
-        The Sudoku board represented as a 9x9 grid.
+    - morse_code_dict: dict
+        A dictionary containing the mapping of characters to their respective Morse code representation.
     """
 
-    def __init__(self, board):
+    def __init__(self):
         """
-        Constructor to instantiate the SudokuSolver class.
+        Constructor to instantiate the MorseCodeConverter class.
+
+        Initializes the morse_code_dict attribute with the mapping of characters to Morse code.
+        """
+
+        self.morse_code_dict = {
+            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....',
+            'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.',
+            'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+            'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-',
+            '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', '.': '.-.-.-', ',': '--..--',
+            '?': '..--..', "'": '.----.', '!': '-.-.--', '/': '-..-.', '(': '-.--.', ')': '-.--.-', '&': '.-...',
+            ':': '---...', ';': '-.-.-.', '=': '-...-', '+': '.-.-.', '-': '-....-', '_': '..--.-', '"': '.-..-.',
+            '$': '...-..-', '@': '.--.-.', ' ': '/'
+        }
+
+    def convert_to_morse_code(self, text: str):
+        """
+        Converts the given text to Morse code.
 
         Parameters:
-        - board: list of lists
-            The initial Sudoku board with empty cells represented as 0.
-        """
-
-        self.board = board
-
-    def solve_sudoku(self):
-        """
-        Solves the Sudoku board using backtracking algorithm.
+        - text: str
+            The text to be converted to Morse code.
 
         Returns:
-        - bool:
-            True if the Sudoku board is solvable, False otherwise.
+        - str:
+            The Morse code representation of the input text.
         """
 
-        # Find an empty cell on the board
-        empty_cell = self.find_empty_cell()
+        # Converting the text to uppercase for consistency
+        text = text.upper()
 
-        # If there are no empty cells, the board is solved
-        if not empty_cell:
-            return True
+        # Initializing an empty string to store the Morse code representation
+        morse_code = ""
 
-        # Unpack the row and column of the empty cell
-        row, col = empty_cell
+        # Iterating through each character in the text
+        for char in text:
+            # Checking if the character is present in the Morse code dictionary
+            if char in self.morse_code_dict:
+                # Appending the Morse code representation of the character to the result string
+                morse_code += self.morse_code_dict[char] + " "
 
-        # Try different numbers from 1 to 9
-        for num in range(1, 10):
-            # Check if the number is valid in the current position
-            if self.is_valid(num, row, col):
-                # Place the number in the current position
-                self.board[row][col] = num
-
-                # Recursively solve the Sudoku board
-                if self.solve_sudoku():
-                    return True
-
-                # If the current number doesn't lead to a solution, backtrack
-                self.board[row][col] = 0
-
-        # If no number can be placed in the current position, the board is unsolvable
-        return False
-
-    def find_empty_cell(self):
-        """
-        Finds an empty cell (cell with value 0) on the Sudoku board.
-
-        Returns:
-        - tuple:
-            The row and column indices of the empty cell, or None if no empty cell is found.
-        """
-
-        for row in range(9):
-            for col in range(9):
-                if self.board[row][col] == 0:
-                    return row, col
-
-        return None
-
-    def is_valid(self, num, row, col):
-        """
-        Checks if a number is valid in the current position on the Sudoku board.
-
-        Parameters:
-        - num: int
-            The number to be checked.
-        - row: int
-            The row index of the current position.
-        - col: int
-            The column index of the current position.
-
-        Returns:
-        - bool:
-            True if the number is valid in the current position, False otherwise.
-        """
-
-        # Check if the number is already present in the same row
-        for i in range(9):
-            if self.board[row][i] == num:
-                return False
-
-        # Check if the number is already present in the same column
-        for i in range(9):
-            if self.board[i][col] == num:
-                return False
-
-        # Check if the number is already present in the same 3x3 box
-        box_row = (row // 3) * 3
-        box_col = (col // 3) * 3
-        for i in range(3):
-            for j in range(3):
-                if self.board[box_row + i][box_col + j] == num:
-                    return False
-
-        return True
+        # Returning the Morse code representation
+        return morse_code.strip()
 
 
-# Example usage of the SudokuSolver class:
+# Example usage of the MorseCodeConverter class:
 
-# Define the Sudoku board
-board = [
-    [5, 3, 0, 0, 7, 0, 0, 0, 0],
-    [6, 0, 0, 1, 9, 5, 0, 0, 0],
-    [0, 9, 8, 0, 0, 0, 0, 6, 0],
-    [8, 0, 0, 0, 6, 0, 0, 0, 3],
-    [4, 0, 0, 8, 0, 3, 0, 0, 1],
-    [7, 0, 0, 0, 2, 0, 0, 0, 6],
-    [0, 6, 0, 0, 0, 0, 2, 8, 0],
-    [0, 0, 0, 4, 1, 9, 0, 0, 5],
-    [0, 0, 0, 0, 8, 0, 0, 7, 9]
-]
+# Creating an instance of the MorseCodeConverter class
+converter = MorseCodeConverter()
 
-# Create an instance of SudokuSolver
-solver = SudokuSolver(board)
-
-# Solve the Sudoku board
-if solver.solve_sudoku():
-    # Print the solved board
-    for row in solver.board:
-        print(row)
-else:
-    print("No solution exists for the given Sudoku board.")
+# Converting a text to Morse code
+text = "Hello, World!"
+morse_code = converter.convert_to_morse_code(text)
+print(f"The Morse code representation of '{text}' is: {morse_code}")
